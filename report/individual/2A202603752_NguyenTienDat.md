@@ -64,14 +64,23 @@
 
 _Model nào tụt nhiều nhất, ở nhóm case nào? Nêu 2 case cụ thể và cơ chế khiến model sai._
 
+BoW + LogReg tụt nhiều nhất: F1 từ 0.788 trên SUB xuống 0.333 trên 50 case khó. Ví dụ #12 giả làm người mới trong thành phố, #16 giả làm bạn cũ bán hàng; giọng tự nhiên, ít từ khóa spam nên BoW dễ bỏ sót.
+
 ## 5. Thử thách cá nhân
 
 _Đề theo SEED của bạn, cách làm, kết quả, giải thích._
 
 ## 6. Phương án cho sản phẩm thật
 
-_Với yêu cầu p95 < 50 ms/tin cho 10 triệu SMS/ngày: chọn phương án nào, dẫn số liệu nào, chấp nhận đánh đổi gì._
+Chọn BoW + MLP để triển khai. p95 chỉ 0.624 ms/tin, thấp hơn nhiều so với giới hạn 50 ms. Thông lượng đo được là 26.399 tin/s, trong khi 10 triệu tin/ngày tương đương khoảng 116 tin/s nếu chia đều cả ngày. Như vậy phương án này có thể xử lý tải lớn, F1 test đạt 0.941.
+
+Encoder MiniLM + MLP có F1 test cao hơn (0.958) và p95 40.492 ms vẫn dưới ngưỡng, nhưng độ trễ gần sát giới hạn hơn; thông lượng cả lô chỉ 43 tin/s, thấp hơn mức trung bình cần khoảng 116 tin/s. Chọn BoW + MLP chấp nhận F1 thấp hơn 0.017 để đổi lấy tốc độ và dư địa tải tốt hơn.
 
 ## 7. AI log và điều đã học
 
+1. Nhờ AI chọn model cho sản phẩm với yêu cầu p95 < 50 ms. Đối chiếu F1, độ trễ và thông lượng; chọn BoW + MLP theo số liệu p95 0.624 ms/tin và F1 test 0.941.
+2. Nhờ AI rà câu 4 rồi bổ sung. Xác định cần số liệu và hai case cụ thể; thêm mức giảm F1 cùng ví dụ #12 và #16.
+3. Nhờ AI tìm lại hướng dẫn câu 7 trong Git và hoàn thiện mục này; khôi phục yêu cầu, ghi lại các lần hỗ trợ và điều đã học.
+
+Điểm cao trên tập test thường chưa chắc đồng nghĩa model xử lý tốt tin nhắn lạ. BoW dựa nhiều vào từ khóa nên dễ bỏ sót spam viết như tin nhắn bình thường.
 Thực hành luôn là cách tốt nhất để hiểu rõ một lĩnh vực, cộng thêm áp lực thời gian có thể thúc đẩy giới hạn học tập của bản thân.
